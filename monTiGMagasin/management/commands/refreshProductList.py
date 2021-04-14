@@ -26,6 +26,7 @@ class Command(BaseCommand):
                                                       'comments':str(product['comments']),
                                                       'owner':str(product['owner']),
                                                       'quantityInStock':'0',
+                                                      'nombre_produit_vendu':'0',
                                                     })
             if serializer.is_valid():
                 serializer.save()
