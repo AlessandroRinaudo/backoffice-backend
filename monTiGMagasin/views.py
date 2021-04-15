@@ -56,3 +56,22 @@ class ProductDecrementStock(APIView):
         serializer = InfoProductSerializer(product)
         return Response(serializer.data)
 
+
+class ProductModifyDiscount(APIView):
+    def get_object(self, tig_id):
+        try:
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, tig_id, number, format=None):
+        productBefore = InfoProduct.objects.get(tig_id=tig_id)
+        if productBefore.sale == False:
+            productBefore.sale = True
+        if number <= 100:
+            productBefore.discount = number
+            productBefore.save()
+
+        product = self.get_object(tig_id=tig_id)
+        serializer = InfoProductSerializer(product)
+        return Response(serializer.data)
