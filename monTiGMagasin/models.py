@@ -15,5 +15,6 @@ class InfoProduct(models.Model):
     owner = models.CharField(max_length=20, blank=True, default='tig_orig')
     quantityInStock = models.IntegerField(default='0')
     nombre_produit_vendu = models.IntegerField(default='0')
+    
     class Meta:
         ordering = ('name',)
