@@ -79,3 +79,73 @@ class ProductModifyDiscount(APIView):
         product = self.get_object(tig_id=tig_id)
         serializer = InfoProductSerializer(product)
         return Response(serializer.data)
+
+
+class IncrementMultiple(APIView):
+    def get_object(self, tig_id):
+        try:
+            tig_id = self.request.query_params.getlist('id', '')
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        ids = self.request.query_params.getlist('id', '')
+        numbers = self.request.query_params.getlist('number', '')
+        for i in range(len(ids)):
+            productBefore = InfoProduct.objects.get(tig_id=ids[i])
+            productBefore.quantityInStock = productBefore.quantityInStock + int(numbers[i])
+            productBefore.save()
+
+        products = InfoProduct.objects.all()
+        serializer = InfoProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+class DecrementMultiple(APIView):
+    def get_object(self, tig_id):
+        try:
+            tig_id = self.request.query_params.getlist('id', '')
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        ids = self.request.query_params.getlist('id', '')
+        numbers = self.request.query_params.getlist('number', '')
+        for i in range(len(ids)):
+            productBefore = InfoProduct.objects.get(tig_id=ids[i])
+            if productBefore.quantityInStock - int(numbers[i]) >= 0 :
+                productBefore.quantityInStock = productBefore.quantityInStock - int(numbers[i])
+                productBefore.save()
+
+        products = InfoProduct.objects.all()
+        serializer = InfoProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+class ModifyDiscountMultiple(APIView):
+    def get_object(self, tig_id):
+        try:
+            tig_id = self.request.query_params.getlist('id', '')
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        ids = self.request.query_params.getlist('id', '')
+        numbers = self.request.query_params.getlist('number', '')
+        for i in range(len(ids)):
+            productBefore = InfoProduct.objects.get(tig_id=ids[i])
+            if int(numbers[i]) == 0:
+                productBefore.sale = False
+                productBefore.discount = 0
+            else:
+                if int(numbers[i]) <= 100:
+                    if productBefore.sale == False:
+                        productBefore.sale = True
+                    productBefore.discount = int(numbers[i])
+            productBefore.save()
+
+        products = InfoProduct.objects.all()
+        serializer = InfoProductSerializer(products, many=True)
+        return Response(serializer.data)

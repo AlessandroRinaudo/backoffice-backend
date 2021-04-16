@@ -7,4 +7,7 @@ urlpatterns = [
     path('incrementStock/<int:tig_id>/<int:number>/', views.ProductIncrementStock.as_view()),
     path('decrementStock/<int:tig_id>/<int:number>/', views.ProductDecrementStock.as_view()),
     path('modifyDiscount/<int:tig_id>/<int:number>/', views.ProductModifyDiscount.as_view()),
+    path('incrementStockMultiple/', views.IncrementMultiple.as_view()),
+    path('decrementStockMultiple/', views.DecrementMultiple.as_view()),
+    path('modifyDiscountMultiple/', views.ModifyDiscountMultiple.as_view()),
 ]
