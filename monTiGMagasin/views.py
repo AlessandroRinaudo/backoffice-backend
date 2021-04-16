@@ -4,6 +4,12 @@ from django.http import Http404
 from monTiGMagasin.config import baseUrl
 from monTiGMagasin.models import InfoProduct
 from monTiGMagasin.serializers import InfoProductSerializer
+from monTiGMagasin.models import ProduitPoissons
+from monTiGMagasin.serializers import ProduitPoissonsSerializer
+from monTiGMagasin.models import ProduitCrustaces
+from monTiGMagasin.serializers import ProduitCrustacesSerializer
+from monTiGMagasin.models import ProduitCoquillages
+from monTiGMagasin.serializers import ProduitCoquillagesSerializer
 
 # Create your views here.
 class InfoProductList(APIView):
@@ -149,3 +155,53 @@ class ModifyDiscountMultiple(APIView):
         products = InfoProduct.objects.all()
         serializer = InfoProductSerializer(products, many=True)
         return Response(serializer.data)
+
+
+class PoissonsproductList(APIView):
+    def get_object(self, tig_id):
+        try:
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        res = []
+        for prod in ProduitPoissons.objects.all():
+            serializerPoisson = ProduitPoissonsSerializer(prod)
+            product = self.get_object(tig_id=serializerPoisson.data['tigID'])
+            serializer = InfoProductSerializer(product)
+            res.append(serializer.data)
+        return Response(res)
+
+class CrustacesproductList(APIView):
+    def get_object(self, tig_id):
+        try:
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        res = []
+        for prod in ProduitCrustaces.objects.all():
+            serializerCrustaces = ProduitCrustacesSerializer(prod)
+            product = self.get_object(tig_id=serializerCrustaces.data['tigID'])
+            serializer = InfoProductSerializer(product)
+            res.append(serializer.data)
+        return Response(res)
+
+
+class CoquillagesproductList(APIView):
+    def get_object(self, tig_id):
+        try:
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        res = []
+        for prod in ProduitCoquillages.objects.all():
+            serializerCoquillages = ProduitCoquillagesSerializer(prod)
+            product = self.get_object(tig_id=serializerCoquillages.data['tigID'])
+            serializer = InfoProductSerializer(product)
+            res.append(serializer.data)
+        return Response(res)

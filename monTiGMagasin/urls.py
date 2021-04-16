@@ -10,4 +10,7 @@ urlpatterns = [
     path('incrementStockMultiple/', views.IncrementMultiple.as_view()),
     path('decrementStockMultiple/', views.DecrementMultiple.as_view()),
     path('modifyDiscountMultiple/', views.ModifyDiscountMultiple.as_view()),
+    path('poissons/', views.PoissonsproductList.as_view()),
+    path('crustaces/', views.CrustacesproductList.as_view()),
+    path('coquillages/', views.CoquillagesproductList.as_view()),
 ]
