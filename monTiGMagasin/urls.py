@@ -13,7 +13,6 @@ urlpatterns = [
     path('poissons/', views.PoissonsproductList.as_view()),
     path('crustaces/', views.CrustacesproductList.as_view()),
     path('coquillages/', views.CoquillagesproductList.as_view()),
-    path('ModifySellPrice/<int:tig_id>/<int:price>/',
-         views.ModifierPrixVente.as_view()),
+    path('ModifySellPrice/<int:tig_id>/<int:price>/', views.ModifierPrixVente.as_view()),
     path('transactions/', views.addTransaction.as_view()),
 ]

@@ -27,6 +27,7 @@ class Command(BaseCommand):
                                                       'owner':str(product['owner']),
                                                       'quantityInStock':'0',
                                                       'nombre_produit_vendu':'0',
+                                                      'sell_price': str(product['price'] + 10),
                                                     })
             if serializer.is_valid():
                 serializer.save()

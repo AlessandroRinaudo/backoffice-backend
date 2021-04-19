@@ -236,5 +236,14 @@ class addTransaction(APIView):
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            product = InfoProduct.objects.get(tig_id=serializer.data['tig_id'])
+            if serializer.data['type'] == "Sale":
+                product.nombre_produit_vendu = product.nombre_produit_vendu + serializer.data['quantity']
+                product.quantityInStock = product.quantityInStock - int(serializer.data['quantity'])
+            elif serializer.data['type'] == "Unsold":
+                product.quantityInStock = product.quantityInStock - int(serializer.data['quantity'])
+            elif serializer.data['type'] == "Purchase":
+                product.quantityInStock = product.quantityInStock + int(serializer.data['quantity'])
+            product.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
