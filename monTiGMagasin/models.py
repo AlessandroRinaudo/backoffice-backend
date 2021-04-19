@@ -15,9 +15,21 @@ class InfoProduct(models.Model):
     owner = models.CharField(max_length=20, blank=True, default='tig_orig')
     quantityInStock = models.IntegerField(default='0')
     nombre_produit_vendu = models.IntegerField(default='0')
+    sell_price = models.IntegerField(default='0')
     
     class Meta:
         ordering = ('name',)
+
+
+class Transaction(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    price = models.FloatField(default='0')
+    quantity = models.IntegerField(default='0')
+    tig_id = models.IntegerField(default='-1')
+    type = models.CharField(max_length=100, blank=True, default='')
+
+    class Meta:
+        ordering = ('tig_id',)
 
 
 class ProduitPoissons(models.Model):
@@ -42,3 +54,4 @@ class ProduitCoquillages(models.Model):
 
     class Meta:
         ordering = ('tigID',)
+        

@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from django.http import Http404
 from monTiGMagasin.config import baseUrl
 from monTiGMagasin.models import InfoProduct
@@ -10,6 +11,8 @@ from monTiGMagasin.models import ProduitCrustaces
 from monTiGMagasin.serializers import ProduitCrustacesSerializer
 from monTiGMagasin.models import ProduitCoquillages
 from monTiGMagasin.serializers import ProduitCoquillagesSerializer
+from monTiGMagasin.serializers import TransactionSerializer
+from monTiGMagasin.models import Transaction
 
 # Create your views here.
 class InfoProductList(APIView):
@@ -205,3 +208,33 @@ class CoquillagesproductList(APIView):
             serializer = InfoProductSerializer(product)
             res.append(serializer.data)
         return Response(res)
+
+class ModifierPrixVente(APIView):
+    def get_object(self, tig_id):
+        try:
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+
+    def get(self, request, tig_id, price, format=None):
+        productBefore = InfoProduct.objects.get(tig_id=tig_id)
+        productBefore.sell_price = price
+        productBefore.save()
+
+        product = self.get_object(tig_id=tig_id)
+        serializer = InfoProductSerializer(product)
+        return Response(serializer.data)
+
+
+class addTransaction(APIView):
+    def get(self, request, format=None):
+        transactions = Transaction.objects.all()
+        serializer = TransactionSerializer(transactions, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = TransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
