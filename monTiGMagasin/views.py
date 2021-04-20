@@ -204,9 +204,10 @@ class CoquillagesproductList(APIView):
         res = []
         for prod in ProduitCoquillages.objects.all():
             serializerCoquillages = ProduitCoquillagesSerializer(prod)
-            product = self.get_object(tig_id=serializerCoquillages.data['tigID'])
-            serializer = InfoProductSerializer(product)
-            res.append(serializer.data)
+            if serializerCoquillages.data['tigID'] != 7 :
+                product = self.get_object(tig_id=serializerCoquillages.data['tigID'])
+                serializer = InfoProductSerializer(product)
+                res.append(serializer.data)
         return Response(res)
 
 class ModifierPrixVente(APIView):
