@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 # Create your models here.
 class InfoProduct(models.Model):
@@ -22,14 +23,14 @@ class InfoProduct(models.Model):
 
 
 class Transaction(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=datetime.datetime.now())
     price = models.FloatField(default='0')
     quantity = models.IntegerField(default='0')
     tig_id = models.IntegerField(default='-1')
     type = models.CharField(max_length=100, blank=True, default='')
 
     class Meta:
-        ordering = ('tig_id',)
+        ordering = ('created',)
 
 
 class ProduitPoissons(models.Model):

@@ -198,16 +198,16 @@ class CoquillagesproductList(APIView):
         try:
             return InfoProduct.objects.get(tig_id=tig_id)
         except InfoProduct.DoesNotExist:
-            raise Http404
+            return
+            # raise Http404
 
     def get(self, request, format=None):
         res = []
         for prod in ProduitCoquillages.objects.all():
             serializerCoquillages = ProduitCoquillagesSerializer(prod)
-            if serializerCoquillages.data['tigID'] != 7 :
-                product = self.get_object(tig_id=serializerCoquillages.data['tigID'])
-                serializer = InfoProductSerializer(product)
-                res.append(serializer.data)
+            product = self.get_object(tig_id=serializerCoquillages.data['tigID'])
+            serializer = InfoProductSerializer(product)
+            res.append(serializer.data)
         return Response(res)
 
 class ModifierPrixVente(APIView):
@@ -248,3 +248,22 @@ class addTransaction(APIView):
             product.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class getTransactionCategory(APIView):
+    def get_object(self, tig_id):
+        try:
+            return InfoProduct.objects.get(tig_id=tig_id)
+        except InfoProduct.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, idCategory, format=None):
+        transactions = Transaction.objects.all()
+        serializerTransaction = TransactionSerializer(transactions, many=True)
+        res = []
+        for transac in serializerTransaction.data:
+            product = self.get_object(tig_id=transac['tig_id'])
+            serializerProduct = InfoProductSerializer(product)
+            if (serializerProduct.data['category'] == idCategory):
+                res.append(transac)
+        return Response(res)
