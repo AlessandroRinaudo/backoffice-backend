@@ -15,5 +15,5 @@ urlpatterns = [
     path('coquillages/', views.CoquillagesproductList.as_view()),
     path('ModifySellPrice/<int:tig_id>/<int:price>/', views.ModifierPrixVente.as_view()),
     path('transactions/', views.addTransaction.as_view()),
-    path('transactions/<int:idCategory>', views.getTransactionCategory.as_view()),
+    path('transactions/<int:idCategory>/', views.getTransactionCategory.as_view()),
 ]
