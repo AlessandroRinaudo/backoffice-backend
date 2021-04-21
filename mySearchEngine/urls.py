@@ -19,6 +19,7 @@ from django.urls import path, include
 urlpatterns = [
 #    path('', admin.site.urls, name = 'projectRoot'),
     path('admin/', admin.site.urls),
+    path('api/', include('users.urls')),
     path('', include('mytig.urls')),
 ###################
 #...TME2 starts...#
@@ -29,5 +30,5 @@ urlpatterns = [
 #...TME3 (controle1) starts...#
     path('', include('monTiGMagasin.urls')),
 #...end of TME3 (controle1)...#
-###############################
+##############################
 ]

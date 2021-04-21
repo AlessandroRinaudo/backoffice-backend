@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 #...TME3 (controle1) starts...#
     'monTiGMagasin.apps.MontigmagasinConfig',
     'corsheaders',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -62,9 +63,9 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:4200",
+# ]
 
 ROOT_URLCONF = 'mySearchEngine.urls'
 
@@ -90,10 +91,23 @@ WSGI_APPLICATION = 'mySearchEngine.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'backtest',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
@@ -135,3 +149,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL='users.User'
+CORS_ORIGIN_ALLOW_ALL=True 
+CORS_ALLOW_CREDENTIALS= True
